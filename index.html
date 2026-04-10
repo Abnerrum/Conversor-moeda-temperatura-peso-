@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversor Universal</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 36px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      color: #1a1a2e;
+      margin-bottom: 28px;
+    }
+
+    h1 span { color: #4361ee; }
+
+    /* Abas */
+    .abas {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .aba {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #666;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .aba:hover { border-color: #4361ee; color: #4361ee; }
+    .aba.ativa { background: #4361ee; color: white; border-color: #4361ee; }
+
+    /* Form */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #1a1a2e;
+      margin-bottom: 16px;
+      transition: border 0.2s;
+      background: #fafafa;
+    }
+
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: #4361ee;
+      background: white;
+    }
+
+    .linha {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: #4361ee;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+
+    button[type="submit"]:hover { background: #3451d1; }
+
+    /* Resultado */
+    .resultado {
+      margin-top: 20px;
+      padding: 18px;
+      background: #f0f4ff;
+      border-radius: 12px;
+      text-align: center;
+      border-left: 4px solid #4361ee;
+    }
+
+    .resultado .label { font-size: 0.8rem; color: #666; margin-bottom: 4px; }
+    .resultado .valor { font-size: 1.8rem; font-weight: 800; color: #4361ee; }
+
+    .erro {
+      margin-top: 16px;
+      padding: 14px;
+      background: #fff0f0;
+      border-radius: 10px;
+      color: #d00;
+      font-size: 0.9rem;
+      text-align: center;
+      border-left: 4px solid #d00;
+    }
+
+    .secao { display: none; }
+    .secao.ativa { display: block; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Conversor <span>Universal</span></h1>
+
+  <!-- Abas de navegação -->
+  <div class="abas">
+    <button type="button" class="aba {% if tipo_ativo == 'moeda' or not tipo_ativo %}ativa{% endif %}"
+            onclick="trocarAba('moeda')">💰 Moeda</button>
+    <button type="button" class="aba {% if tipo_ativo == 'temperatura' %}ativa{% endif %}"
+            onclick="trocarAba('temperatura')">🌡️ Temperatura</button>
+    <button type="button" class="aba {% if tipo_ativo == 'peso' %}ativa{% endif %}"
+            onclick="trocarAba('peso')">⚖️ Peso</button>
+  </div>
+
+  <form method="POST" action="/converter">
+    <input type="hidden" name="tipo" id="tipo" value="{{ tipo_ativo or 'moeda' }}">
+
+    <!-- MOEDA -->
+    <div class="secao {% if tipo_ativo == 'moeda' or not tipo_ativo %}ativa{% endif %}" id="sec-moeda">
+      <label>Valor</label>
+      <input type="number" name="valor" step="any" placeholder="Ex: 100"
+             value="{{ valor if tipo_ativo == 'moeda' else '' }}" required>
+      <div class="linha">
+        <div>
+          <label>De</label>
+          <select name="de">
+            {% for cod in ['BRL','USD','EUR','GBP','ARS','JPY'] %}
+            <option value="{{ cod }}" {% if tipo_ativo == 'moeda' and de == cod %}selected{% endif %}>{{ cod }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Para</label>
+          <select name="para">
+            {% for cod in ['BRL','USD','EUR','GBP','ARS','JPY'] %}
+            <option value="{{ cod }}" {% if tipo_ativo == 'moeda' and para == cod %}selected{% elif cod == 'USD' and not tipo_ativo %}selected{% endif %}>{{ cod }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMPERATURA -->
+    <div class="secao {% if tipo_ativo == 'temperatura' %}ativa{% endif %}" id="sec-temperatura">
+      <label>Valor</label>
+      <input type="number" name="valor" step="any" placeholder="Ex: 100"
+             value="{{ valor if tipo_ativo == 'temperatura' else '' }}">
+      <div class="linha">
+        <div>
+          <label>De</label>
+          <select name="de">
+            {% for u in ['celsius','fahrenheit','kelvin'] %}
+            <option value="{{ u }}" {% if tipo_ativo == 'temperatura' and de == u %}selected{% endif %}>{{ u.capitalize() }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Para</label>
+          <select name="para">
+            {% for u in ['celsius','fahrenheit','kelvin'] %}
+            <option value="{{ u }}" {% if tipo_ativo == 'temperatura' and para == u %}selected{% elif u == 'fahrenheit' and tipo_ativo != 'temperatura' %}selected{% endif %}>{{ u.capitalize() }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- PESO -->
+    <div class="secao {% if tipo_ativo == 'peso' %}ativa{% endif %}" id="sec-peso">
+      <label>Valor</label>
+      <input type="number" name="valor" step="any" placeholder="Ex: 10"
+             value="{{ valor if tipo_ativo == 'peso' else '' }}">
+      <div class="linha">
+        <div>
+          <label>De</label>
+          <select name="de">
+            {% for u in ['grama','kilograma','libra','onca','tonelada'] %}
+            <option value="{{ u }}" {% if tipo_ativo == 'peso' and de == u %}selected{% endif %}>{{ u.capitalize() }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Para</label>
+          <select name="para">
+            {% for u in ['grama','kilograma','libra','onca','tonelada'] %}
+            <option value="{{ u }}" {% if tipo_ativo == 'peso' and para == u %}selected{% elif u == 'kilograma' and tipo_ativo != 'peso' %}selected{% endif %}>{{ u.capitalize() }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Converter →</button>
+  </form>
+
+  {% if resultado is not none %}
+  <div class="resultado">
+    <div class="label">Resultado</div>
+    <div class="valor">{{ resultado }}</div>
+  </div>
+  {% endif %}
+
+  {% if erro %}
+  <div class="erro">{{ erro }}</div>
+  {% endif %}
+
+</div>
+
+<script>
+  function trocarAba(tipo) {
+    // Atualiza input hidden
+    document.getElementById('tipo').value = tipo;
+
+    // Atualiza abas visuais
+    document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+    event.target.classList.add('ativa');
+
+    // Mostra seção correta
+    document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
+    document.getElementById('sec-' + tipo).classList.add('ativa');
+  }
+</script>
+</body>
+</html>
