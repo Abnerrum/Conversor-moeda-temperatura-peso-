@@ -1,40 +1,39 @@
-# 🔄 Conversor Universal
+🔄 Conversor Universal
 
-Aplicação web simples desenvolvida em Python com Flask para converter moedas, temperaturas e pesos.
+Aplicação web desenvolvida em Python com Flask para conversão de moedas, temperaturas e pesos de forma simples e rápida.
 
-## 📋 Funcionalidades
-
-- 💰 **Moeda** — BRL, USD, EUR, GBP, ARS, JPY
-- 🌡️ **Temperatura** — Celsius, Fahrenheit, Kelvin
-- ⚖️ **Peso** — Grama, Kilograma, Libra, Onça, Tonelada
-
-## 🛠️ Tecnologias
-
-- Python 3
-- Flask
-
-## 🚀 Como rodar
-
-```bash
-# Clone o repositório
+📋 Funcionalidades
+💰 Conversão de Moedas
+BRL, USD, EUR, GBP, ARS, JPY
+🌡️ Conversão de Temperatura
+Celsius, Fahrenheit, Kelvin
+⚖️ Conversão de Peso
+Grama, Quilograma, Libra, Onça, Tonelada
+🛠️ Tecnologias Utilizadas
+Python 3
+Flask
+🚀 Como Executar o Projeto
+# Clonar o repositório
 git clone https://github.com/SEU_USUARIO/conversor.git
+
+# Entrar na pasta do projeto
 cd conversor
 
-# Instale as dependências
+# Instalar as dependências
 pip install -r requirements.txt
 
-# Rode a aplicação
+# Executar a aplicação
 python app.py
-```
 
-Acesse: http://localhost:5000
+A aplicação estará disponível em:
+👉 http://localhost:5000
 
-## 📁 Estrutura do projeto
+📁 Estrutura do Projeto
 conversor/
-├── app.py                  # Lógica principal e rotas
-├── requirements.txt        # Dependências
+├── app.py               # Lógica principal e rotas
+├── requirements.txt     # Dependências do projeto
 └── templates/
-└── index.html          # Interface web
-## 👤 Autor
+    └── index.html       # Interface web
+👤 Autor
 
-Feito por **Abner Luiz**
+Desenvolvido por Abner Luiz
