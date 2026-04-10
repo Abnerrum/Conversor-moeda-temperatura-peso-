@@ -30,3 +30,11 @@ python app.py
 Acesse: http://localhost:5000
 
 ## 📁 Estrutura do projeto
+conversor/
+├── app.py                  # Lógica principal e rotas
+├── requirements.txt        # Dependências
+└── templates/
+└── index.html          # Interface web
+## 👤 Autor
+
+Feito por **Abner Luiz**
